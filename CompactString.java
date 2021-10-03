@@ -3,8 +3,8 @@ public class CompactString{
 		String expandedStr = "aaaaaaaaaaaaaaa";
 		CompactString(expandedStr);
 
-		String compactStr = "a10b4";
-		ExpandString3(compactStr);
+		String compactStr = "ac10b4";
+		ExpandStringAdvance(compactStr);
 	}
 
 	public static void CompactString(String str){
@@ -27,29 +27,34 @@ public class CompactString{
 		System.out.println("Compact string: " + output);
 	}
 
-	public static void ExpandString1(String str){
-		String output = "";
-		String number = "";
-		int j = 0;
+	public static void ExpandStringAdvance(String str){
+		StringBuilder output = new StringBuilder();
+		StringBuilder nonDigit = new StringBuilder();
+		int number = 0;
+
+		boolean isDigit = false;
 		for(int i = 0; i < str.length(); i++){
-			if(str.charAt(i) >= 'a' && str.charAt(i) <= 'z'){
-				number = "";
-				j = i;
+			char c = str.charAt(i);
+
+			if(IsDigit(c)){
+				number = number * 10 + (c - '0');
+				isDigit = true;
 			} else{
-				number += str.charAt(i);
-			}
-
-			if(number != ""){
-				int k = Integer.parseInt(number);
-				System.out.println("k" + k);
-
-				while(k > 0){
-					output += str.charAt(j);
-					k--;
+				if(isDigit){
+					for(int l = 0; l < number; l++){
+						output.append(nonDigit);
+					}
+					nonDigit = new StringBuilder();
+					number = 0;
+					isDigit = false;
 				}
+				nonDigit.append(c);
 			}
 		}
-		System.out.println("Expand string: " + output);
+		for(int l = 0; l < number; l++){
+			output.append(nonDigit);
+		}
+		System.out.println("Expanded string: " + output.toString());
 	}
 
 	public static void ExpandString2(String str){		// doesn't work for input like a15
@@ -85,8 +90,6 @@ public class CompactString{
 	}
 
 	public static boolean IsDigit(char c){
-		return (c >= 'a' && c <= 'z') ? false : true;
+		return (c >= '0' && c <= '9');
 	}
 }
-
-//aaaaaaaaaaa

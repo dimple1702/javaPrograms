@@ -7,58 +7,50 @@ import java.util.*;
 public class MapStringNumber{
 	public static void main(String args[]){
 		String str = "a15b20ccc100";
-		int arr[] = new int[]{1,2,3};
-		printInfiniteArray(arr, arr.length);
-		ExtractString(str, str.length());
-	}
-	public static void printInfiniteArray(int arr[], int n){
-		int size = Integer.MAX_VALUE;
-		int infinite[] = new int[size];
 
-		for(int i = 0; i < size; i+=n){
-			for(int j = 0; j < n; j++){
-				System.out.println(i+j);
-				infinite[i+j] = arr[j];
-			}
-		}
-
-		for(int i = 1; i < size; i++){
-			System.out.print(infinite[i] + " ");
-		}
-	}
-
-	public static void Map(String str, int n){
-		String strArr[] = new String[n];
-		String numArr[] = new String[n];
-
-		String string = "";
-		String number = "";
-
-		int strIndex = 0, numIndex = 0;
-		for(int i = 0; i < n; i++){
-			if(str.charAt(i) >= 'a' && str.charAt(i) <= 'z'){
-				string += str.charAt(i);
-			}	
-
-		}
-
-		for(int i = 0; i < n; i++){
-			int j = 0;
-			if(str.charAt(i) >= 'a' && str.charAt(i) <= 'z'){
-				numArr[numIndex++] = str.substring(j, i);
-				j = i;
-			}
-		}
+		Map<String, Integer> map = Map(str);
 		
-		print(strArr, strArr.length);
-		print(numArr, numArr.length);
-	}
+		System.out.println("\nWay1 of printing map: ");
+		map.forEach((k,v) -> System.out.println(k + " -> " + v));
 
-	public static void print(String str[], int n){
-		for(int i = 0; i < n; i++){
-			System.out.print(str[i] + " ");
+		System.out.println("\nWay2 of printing map: ");
+		map.entrySet().forEach(entry -> System.out.println(entry.getKey() + " -> " + entry.getValue()));
+
+		System.out.println("\nWay3 of printing map: ");
+		for(Map.Entry<String, Integer> entry : map.entrySet()){
+			System.out.println(entry.getKey() + " -> " + entry.getValue());
 		}
-		System.out.println();
 
 	}
+
+	public static Map<String,Integer> Map(String str){
+		Map<String, Integer> map =  new HashMap();		// interface and concrete implemetation,  Map - types
+		
+		StringBuilder letter = new StringBuilder();
+		int number = 0;
+		boolean isDigits =  false;
+
+		for(int i = 0; i < str.length(); i++){
+			char c = str.charAt(i);
+			if(IsDigit(c)){
+				number = number * 10 + (c - '0');
+				isDigits = true;
+			}else{
+				if(isDigits){
+					map.put(letter.toString(), number);
+					letter = new StringBuilder();
+					number = 0;
+					isDigits = false;
+				}
+				letter.append(c);
+			}
+		}
+		map.put(letter.toString(), number);
+		return map;
+	}
+
+	public static boolean IsDigit(char c) {
+		return c >= '0' && c <= '9';
+	}
+
 }
